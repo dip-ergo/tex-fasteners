@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="mrp_workorder_employees" model="ir.ui.view">
+            <field name="name">mrp_workorder_employees</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp_workorder.mrp_workorder_view_form_tablet" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('workorder_actions')][1]" position="after">
+                    <div class="workorder_actions">
+                        <div class="o_workorder_bar_content o_workorder_actions" name="wo_custom_bar">
+                            <div class="workcenter_workers">
+                                <field name="employee_ids" widget="many2many_tags" readonly="1" />
+                            </div>
+                            <button name="open_employee_popup" type="object" class="oe_highlight" icon="fa-user"/>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+
+        <!-- primary|extension Inherited .:Form:. view for "model" -->
+        <record id="mrp_production_worker_time" model="ir.ui.view">
+            <field name="name">mrp_production_worker_time</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[2]" position="after">
+                    <page string="Worker Times">
+                        <button name="%(hr_attendance.hr_attendance_action)d" string="View Attendences" type="action" class="oe_link oe_right" context="{'search_default_wo_id': [id]}" attrs="{'invisible': [('production_state','in',('done','cancel'))]}" />
+                        <group string="Worker times">
+                            <field name="worker_times" nolabel="1">
+                                <tree>
+                                    <field name="employee_id" />
+                                    <field name="check_in" string="Start Date" />
+                                    <field name="check_out" string="End Date" />
+                                    <field name="worked_hours"  widget="float_time" />
+                                </tree>
+                            </field>
+                        </group>
+                        <button name="add_manual_worktime" string="Manual entry" type="object" class="oe_link oe_right" attrs="{'invisible': [('production_state','in',('done','cancel'))]}"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        
+        <template id="mrp_workorder_workers" name="mrp_workorder_workers" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/css" href="/mrp_workorder_attendance/static/src/css/mrp_workers.css"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

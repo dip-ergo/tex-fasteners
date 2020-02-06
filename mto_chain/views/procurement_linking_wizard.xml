@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Form view for "model" -->
+        <record id="procurement_linking_form" model="ir.ui.view">
+            <field name="name">procurement_linking_form</field>
+            <field name="model">procurement.linking</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form >
+                    <sheet>
+                        <group>
+                            <field name="purchase_id" />
+                        </group>
+                        <field name="linked" invisible="1" />
+                        <field name="line_ids" attrs="{'readonly': [('linked','!=',False)]}">
+                            <tree editable="bottom">
+                                <field name="purchase_line_id" attrs="{'invisible': [('from_stock','=',True)]}" />
+                                <field name="production_id" attrs="{'required': [('sale_id','=',False)], 'readonly': [('sale_id','!=',False)]}" />
+                                <field name="sale_id" attrs="{'required': [('production_id','=',False)], 'readonly': [('production_id','!=',False)]}" />
+                                <field name="supply_quantity"  />
+                                <field name="supply_uom"  />
+                                <field name="demand_quantity"  />
+                                <field name="demand_uom"  />
+                                <field name="from_stock"  />
+                                <field name="source"  />
+                            </tree>
+                        </field>
+                        <footer>
+                            <button name="link_manual_procurement" string="Link" type="object" class="oe_highlight" attrs="{'invisible': [('linked','!=',False)] }" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="procurement_linking_tree" model="ir.ui.view">
+            <field name="name">procurement_linking_tree</field>
+            <field name="model">procurement.linking</field>
+            <field name="type">tree</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="purchase_id" />
+                    <field name="linked" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="procurement_linking_search" model="ir.ui.view">
+            <field name="name">procurement_linking_search</field>
+            <field name="model">procurement.linking</field>
+            <field name="type">search</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <search string="procurement.linking">
+                    <field name="purchase_id" />
+                </search>
+            </field>
+        </record>
+  
+        <record id="procurement_linking_action" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Link Procurement</field>
+            <field name="res_model">procurement.linking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="target">current</field>
+            <field name="search_view_id" ref="procurement_linking_search" />
+            <field name="context">{'search_default_purchase_id': context.get("active_id")}</field>
+        </record>
+        
+        <record id="menu_linking" model="ir.ui.menu">
+            <field name="name">PO-MO Linking</field>
+            <field name="sequence" eval="1000" />
+        </record>
+        
+        <record id="menu_procurement_linking" model="ir.ui.menu">
+            <field name="name">PO-MO Linking</field>
+            <field name="sequence" eval="10" />
+            <field name="action" ref="procurement_linking_action" />
+            <field name="parent_id" ref="menu_linking" />
+        </record>
+    </data>
+</odoo>

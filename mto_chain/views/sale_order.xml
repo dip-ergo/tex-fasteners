@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_order_form_line_mto" model="ir.ui.view">
+            <field name="name">view_order_form_line_mto</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[last()]" position="after">
+                    <field name="node_id" invisible="1" />
+                    <field name="date_expected" class="highlight-date" string="Delivery Date" attrs="{'required': True, 'readonly': [('state', 'in', ('done', 'cancel'))]}" />
+                    <field name="priority_id" string="Priority" options="{'no_create_edit': True, 'no_open': True}" />
+                    <button name="%(action_mto_client)d" string="MTO Chain" type="action" icon="fa-sitemap" attrs="{'invisible': ['|',('node_id','=',False),('parent.state','not in',('sale'))]}" />
+                    <button name="action_update" string="Update" type="object" icon="fa-check-circle" attrs="{'invisible': ['|',('node_id','=',False),('parent.state','not in',('sale'))]}" />
+                    <button name="%(action_cancel_mto)d" string="Cancel MTO" type="action" icon="fa-times-circle" attrs="{'invisible': ['|',('node_id','=',False),('parent.state','not in',('sale'))]}" />
+                </xpath>
+            </field>
+        </record>
+        <template id="assets_backend" name="web_widget_datepicker_optionsassets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/mto_chain/static/src/js/datepicker.js"></script>
+                <link rel="stylesheet" href="/mto_chain/static/src/scss/mto.scss"></link>
+            </xpath>
+        </template>
+    </data>
+</odoo>

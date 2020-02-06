@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="quality_check_dragonfly_mrp" name="Quality Dragonfly Mrp" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/dragonfly_mrp/static/src/js/quality.js"></script>
+        </xpath>
+    </template>
+    <template id="sfinished_dragonfly_mrp" name="Sfinished Reveiew Answer" inherit_id="survey.sfinished">
+        <xpath expr="//a/.." position="replace"/>
+    </template>
+</odoo>

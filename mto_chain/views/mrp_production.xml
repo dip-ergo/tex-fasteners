@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="mrp_production_consumption_line_link" model="ir.ui.view">
+            <field name="name">view.model.form inherited</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="before">
+                    <group>
+                        <button name="link_purchases" string="Link Procurements" type="object" class="oe_link"/>
+                    </group>
+                </xpath>
+                <field name="date_planned_start" position="attributes">
+                    <attribute name="class" add="highlight-date" seperator=" "></attribute>
+                </field>
+                <field name="date_planned_finished" position="attributes">
+                    <attribute name="invisible">False</attribute>
+                </field>
+                <field name="date_planned_finished" position="attributes">
+                    <attribute name="class" add="highlight-date" seperator=" "></attribute>
+                </field>
+                <xpath expr="//div[hasclass('oe_title')]" position="inside">
+                    <field name="released" invisible="1" />
+                    <div attrs="{'invisible': ['|',('state','not in',('planned'))]}">
+                        <h2 attrs="{'invisible': [('released','=',False)]}" style="color: green;}">
+                            Workorders Released
+                        </h2>
+                        <h2 attrs="{'invisible': [('released','!=',False)]}" style="color: red;}">
+                            Workorders Not Released
+                        </h2>
+                    </div>
+                </xpath>
+                <xpath expr="//header[last()]//button[last()]" position="after">
+                    <button name="button_release" string="Release" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state','not in',('planned')),('released','!=',False)]}" groups="mrp.group_mrp_manager" />
+                    <button name="button_unrelease" string="Unrelease" type="object" attrs="{'invisible': ['|',('state','not in',('planned')),('released','=',False)]}" groups="mrp.group_mrp_manager" />
+                </xpath>
+                <xpath expr="//button[@name='button_plan']" position="attributes">
+                    <attribute name="groups">mrp.group_mrp_manager</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_unplan']" position="attributes">
+                    <attribute name="groups">mrp.group_mrp_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp_production_priority" model="ir.ui.view">
+            <field name="name">mrp_production_priority</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view" />
+            <field name="type">tree</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[1]" position="after">
+                    <field name="color" invisible="1" />
+                </xpath>
+                <xpath expr="/tree" position="attributes">
+                    <attribute name="colors">color_field: color</attribute>
+                </xpath>
+                <xpath expr="//field[last()]" position="after">
+                    <field name="priority_id" />
+                </xpath>
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name="released" attrs="{'invisible': [('state','not in',('planned'))]}" />
+                </xpath>
+            </field>
+        </record>
+        <record id="workcenter_line_kanban_priority" model="ir.ui.view">
+            <field name="name">workcenter_line_kanban_priority</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.workcenter_line_kanban" />
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[last()]" position="after">
+                    <field name="color" />
+                </xpath>
+                <xpath expr="//t[@t-name='kanban-box']/div" position="attributes">
+                    <attribute name="t-attf-style">border: 3px solid #{record.color.value or white}; margin-bottom: 2px;</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="production_filter_priority" model="ir.ui.view">
+            <field name="name">production_filter_priority</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter" />
+            <field name="type">search</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[last()]" position="after">
+                    <field name="priority_id" string="Priority" />
+                </xpath>
+                <xpath expr="//group[1]" position="inside">
+                    <filter string="Priority" name="group_priority" domain="[]" context="{'group_by':'priority_id'}"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="workorder_priority" model="ir.ui.view">
+            <field name="name">workorder_priority</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_workorder_form_view_filter" />
+            <field name="type">search</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[last()]" position="after">
+                    <field name="priority_id" string="Priority" />
+                </xpath>
+                <xpath expr="//group[1]" position="inside">
+                    <filter string="Priority" name="group_priority" domain="[]" context="{'group_by':'priority_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="update_mto_mrp" model="ir.actions.server">
+            <field name="type">ir.actions.server</field>
+            <field name="name">Update MTO</field>
+            <field name="model_id" ref="mrp.model_mrp_production" />
+            <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+            <field name="sequence" eval="5" />
+            <field name="context" eval="{}" />
+            <field name="state">code</field>
+            <field name="code">records.action_update()</field>
+        </record>
+        
+        <record id="mrp_workorder_priority" model="ir.ui.view">
+            <field name="name">mrp_workorder_priority</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view_inherit" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[1]" position="after">
+                    <field name="color" invisible="1" />
+                </xpath>
+                <xpath expr="/tree" position="attributes">
+                    <attribute name="colors">color_field: color</attribute>
+                </xpath>
+                <xpath expr="//field[last()]" position="after">
+                    <field name="priority_id" />
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

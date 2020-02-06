@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_discrepancy_report" model="ir.actions.client">
+        <field name="name">Discrepancy Report</field>
+        <field name="tag">discrepancy_report_generic</field>
+    </record>
+
+</odoo>

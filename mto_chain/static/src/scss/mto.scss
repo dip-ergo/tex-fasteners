@@ -1,0 +1,45 @@
+.highlight-date {
+  font-weight: bold !important;
+  color: #0a0a0a !important;
+}
+
+.jstree-default-large .jstree-anchor {
+  line-height: 32px;
+  height: auto;
+  width: 95%;
+}
+.node-times {
+  width: 50%;
+  float: right;
+  text-align: right;
+}
+.node-title {
+  width: 50%;
+  float: left;
+}
+.node-start-time {
+  margin-right: 30px;
+}
+.mto_button_box {
+  float: right;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+#mto_tree {
+  clear: both;
+}
+.button_plan {
+  background: #008784;
+  padding: 7px 12px;
+  margin-left: 10px;
+  display: inline-block;
+  color: #fff;
+}
+.button_plan:hover {
+  background: #007a77;
+}
+.status-cancel .node-times,
+.status-cancel .node-title {
+    text-decoration: line-through;
+    color: red;
+}

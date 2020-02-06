@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pdf_viewer_syary_assets" name="Syray PDF Fullscreen" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/syray_wo_documents/static/src/scss/pdfviewer.scss"></link>
+        </xpath>
+    </template>
+</odoo>

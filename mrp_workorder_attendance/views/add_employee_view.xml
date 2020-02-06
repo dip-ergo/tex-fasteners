@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="workorder_add_employee_popup" model="ir.ui.view">
+            <field name="name">workorder_add_employee_popup</field>
+            <field name="model">workorder.add.employee</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form edit="true" create="false" delete="false">
+                    <field name="_barcode_scanned" widget="barcode_handler" invisible="1"/>
+                    <div style="text-align: center;">
+                        <img src="/mrp_workorder_attendance/static/src/img/barcode.png" alt="Barcode" />
+                        <p>To include worker to this WO, scan the barcode now or enter in the table below.</p>
+                        <p>To remove workers simply remove the worker from the table below and save.</p>
+                    </div>
+                    <field name="employee_ids">
+                        <tree>
+                            <field name="name" />
+                            <field name="barcode" />
+                        </tree>
+                        <form >
+                            <group>
+                                <field name="name" readonly="1" />
+                                <field name="barcode" readonly="1" />
+                            </group>
+                        </form>
+                    </field>
+                    <footer>
+                        <button string="Update" special="save" class="oe_highlight" />
+                        <button string="Cancel" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
