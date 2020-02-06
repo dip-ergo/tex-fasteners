@@ -1,0 +1,64 @@
+/*.workorder_pdf_new {
+        display: flex;
+        flex: 1 0 auto;
+
+        div.o_field_widget.o_field_pdfviewer {
+            margin: 0;
+            height: 600px !important;
+
+            iframe.o_pdfview_iframe.o_field_pdfviewer {
+                display: block;
+                margin: 0;
+                width: 100%;
+                height: 600px !important;
+            }
+        }
+
+    }*/
+.workorder_pdf_new{
+    .o_field_widget.o_field_pdfviewer{
+        position: relative;
+        display: block;
+        height: 0;
+        padding: 0 0 56.25% 0;
+        overflow: hidden;
+    }
+    .o_field_widget .o_pdfview_iframe{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+}
+
+.oe_syray_kanban_button{
+    button, input {
+        overflow: hidden;
+    }
+    button, select {
+        text-transform: none;
+    }
+    input, button, select, optgroup, textarea {
+        margin: 0;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+    }
+    button {
+        border-radius: 0;
+        width: 100%;
+        text-align: left;
+    }
+}
+
+.border_style{
+    color: #7C8386;
+    width: 100%;
+    height: 1px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="discrepancy_assets_backend" name="discrepancy_report assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/syray_discrepancy_report/static/src/js/discrepancy_report_backend.js"></script>
+            <script type="text/javascript" src="/syray_discrepancy_report/static/src/js/discrepancy_report_widgets.js"></script>
+            <link rel="stylesheet" type="text/scss" href="/syray_discrepancy_report/static/src/scss/discrepancy_report.scss"/>
+        </xpath>
+   </template>
+    <record id="action_discrepancy_report" model="ir.actions.client">
+        <field name="model">mto.discrepancy.report</field>
+        <field name="name">Discrepancy Report</field>
+        <field name="tag">discrepancy_report_generic</field>
+    </record>
+</odoo>

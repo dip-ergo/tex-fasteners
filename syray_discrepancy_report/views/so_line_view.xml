@@ -1,0 +1,33 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="sale_order_line_view_inherit">
+         <field name="name">sale.order.line.view.inherit1</field>
+         <field name="model">sale.order</field>
+         <field name="inherit_id" ref="sale.view_order_form"/>
+         <field name="arch" type="xml">
+             <xpath expr="//form/sheet/div[@name='button_box']/button[last()]" position="after">
+                 <button name="%(action_discrepancy_report)d" icon="fa-table" class="oe_stat_button" string="Discrepancy Report" type="action"/>
+              </xpath>
+             <xpath expr="//field[@name='order_line']/tree/field[last()]" position="after">
+                 <button name="%(action_discrepancy_report)d" icon="fa-table" string="Discrepancy Report" type="action" attrs="{'invisible': [('node_id','=',False)]}"/>
+<!--                    <button name="action_open_discrepancy_report" string="Discrepancy Report" type="action" icon="fa-table" attrs="{'invisible': [('node_id','=',False)]}" />-->
+              </xpath>
+         </field>
+    </record>
+
+    <menuitem id="action_purchase_order_report_sub_all"
+            name="Purchase"
+            groups="purchase.group_purchase_manager"
+            action="purchase.action_purchase_order_report_all"
+            parent="purchase.purchase_report"
+            sequence="1"/>
+    <menuitem id="menu_report_purchase_discrepancy"
+            name="Purchase Discrepancy"
+            groups="purchase.group_purchase_manager"
+            action="action_discrepancy_report"
+            parent="purchase.purchase_report"
+            sequence="99"/>
+
+  </data>
+</odoo>

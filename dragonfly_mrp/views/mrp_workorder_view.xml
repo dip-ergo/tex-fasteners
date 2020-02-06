@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_workorder_view_form_tablet_inherit_dragonfly_mrp" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.inherit.dragonfly.mrp</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp_workorder.mrp_workorder_view_form_tablet"/>
+        <field name="arch" type="xml">
+<!--            <xpath expr="//form//div[hasclass('workorder_actions')]//div[hasclass('o_workorder_actions')]" position="inside">-->
+<!--                <button name="action_open_documents" type="object" class="btn-secondary" string="Documents" icon="fa-book o_workorder_btn_icon_small"/>-->
+<!--            </xpath>-->
+            <field class="o_workorder_note" name="note" position="after">
+                <field name="public_url" class="o_workorder_iframe_url" widget="WorkorderIframeUrl"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="mrp_production_workorder_form_view_inherit_dragonfly" model="ir.ui.view">
+        <field name="name">mrp.workorder.view.form.inherit.dragonfly</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <notebook position="before">
+                <field name="public_url" invisible="1"/>
+            </notebook>
+        </field>
+    </record>
+
+    <!--hack to open the dynamic action on new tab-->
+    <record id="action_open_active_workorder" model="ir.actions.server">
+        <field name="name">Workorder</field>
+        <field name="model_id" ref="model_mrp_workorder"/>
+        <field name="binding_model_id" ref="mrp_workorder.model_mrp_workorder"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env['mrp.workorder'].open_product_attachments()
+        </field>
+    </record>
+
+</odoo>

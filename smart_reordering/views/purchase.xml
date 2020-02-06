@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="purchase_order_form_responsible" model="ir.ui.view">
+            <field name="name">purchase_order_form_responsible</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <field name="responsible_moves" invisible="1" />
+                    <button type="object" name="return_responsible_action" class="oe_stat_button" icon="fa-pencil-square-o" >
+                        Responsible
+                    </button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

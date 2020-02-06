@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="mrp_production_form_view_force_cancel" model="ir.ui.view">
+            <field name="name">mrp_production_form_view_force_cancel</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//header[1]" position="after">
+                    <header>
+                        <button name="force_action_cancel" string="Cancel In Progress" type="object" attrs="{'invisible': [('state','not in',('progress'))]}"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

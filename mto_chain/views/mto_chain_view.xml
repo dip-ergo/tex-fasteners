@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_mto_chain_tree" model="ir.ui.view">
+            <field name="name">view_mto_chain_tree</field>
+            <field name="model">mto.chain</field>
+            <field name="type">tree</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <tree string="MTO Chain" create="false" delete="false" edit="false">
+                    <field name="record_ref" widget="many2one_list" />
+                    <field name="res_model" />
+                    <field name="parent_ids" widget="many2many_tags" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view for "model" -->
+        <record id="view_mto_chain_form" model="ir.ui.view">
+            <field name="name">view_mto_chain_form</field>
+            <field name="model">mto.chain</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="MTO Chain" create="false" delete="false" edit="true">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="record_ref" readonly="1"/>
+                            <field name="parent_ids" widget="many2many_tags" />
+                            <field name="child_ids" widget="many2many_tags" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <template id="mto_cascade_view">
+            <div class="container o_stock_reports_page o_stock_reports_no_print">
+                <span t-if="node_id" class="o_report_heading text-center">
+                    <h1>Procurement Chain</h1>
+                </span>
+                <div class="mto_chain_report">
+                    <div class="mto_button_box">
+                        <a href="#" class="button_plan" data-function="action_mo_plan">Plan</a>
+                        <a href="#" class="button_plan" data-function="action_mo_unplan">Unplan</a>
+                    </div>
+                    <div id="mto_tree">
+                        <t t-call="mto_chain.mto_recursive_node">
+                            <t t-set="node" t-value="node_id" />
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="mto_recursive_node">
+            <ul>
+                <li t-att-res-model="node.res_model" t-att-res-id="node.res_id" t-attf-data-jstree='{"icon": "/mto_chain/static/src/img/#{node.res_model}.png"}'>
+                    <div class="mto-node">
+                        <t t-if="node.res_model=='sale.order.line'">
+                            <div class="node-title">
+                                <t t-esc="'%s %s'%(node.record_ref.order_id.name,node.record_ref.product_id.name)" />
+                            </div>
+                            <div class="node-times">
+                                <span class="node-start-time">
+                                    <strong>Ready by: </strong>
+                                    <t t-esc="node.record_ref.date_expected - datetime.timedelta(days=node.record_ref.product_id.sale_delay)" />
+                                </span>
+                                <span class="node-finish-time">
+                                    <strong>Delivery: </strong>
+                                    <t t-esc="node.record_ref.date_expected" />
+                                </span>
+                            </div>
+                        </t>
+                        <t t-if="node.res_model=='mrp.production'">
+                            <div t-attf-class="status-#{node.record_ref.state}" >
+                                <div class="node-title">
+                                    <t t-esc="'%s %s'%(node.record_ref.name,node.record_ref.product_id.name)" />
+                                </div>
+                                <div class="node-times">
+                                    <span t-field="node.record_ref.state" class="node-start-time" />
+                                    <span class="node-start-time">
+                                        <strong>Start: </strong>
+                                        <t t-esc="node.record_ref.date_planned_start" t-options="{'widget': 'datetime'}" />
+                                    </span>
+                                    <span class="node-finish-time">
+                                        <strong>Finish: </strong>
+                                        <t t-esc="node.record_ref.date_planned_finished" t-options="{'widget': 'datetime'}" />
+                                    </span>
+                                </div>
+                                <div class="node-times" t-if="node.record_ref.date_planned_start_wo">
+                                    <span class="node-start-time">
+                                        <strong>Workorder Start: </strong>
+                                        <t t-esc="node.record_ref.date_planned_start_wo" t-options="{'widget': 'datetime'}" />
+                                    </span>
+                                    <span class="node-finish-time">
+                                        <strong>Finish: </strong>
+                                        <t t-esc="node.record_ref.date_planned_finished_wo" t-options="{'widget': 'datetime'}" />
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="node.res_model=='purchase.order.line'">
+                            <div class="node-title">
+                                <t t-esc="'%s'%(node.record_ref.display_name)" />
+                            </div>
+                            <div class="node-times">
+                                <span class="node-start-time">
+                                    <strong>Create: </strong>
+                                    <t t-esc="node.record_ref.create_date" />
+                                </span>
+                                <span class="node-finish-time">
+                                    <strong>Ship: </strong>
+                                    <t t-esc="node.record_ref.date_planned" />
+                                </span>
+                            </div>
+                        </t>
+                    </div>
+                    <t t-foreach="node.child_ids" t-as="child" t-if="node.child_ids">
+                        <t t-call="mto_chain.mto_recursive_node">
+                            <t t-set="node" t-value="child" />
+                        </t>
+                    </t>
+                </li>
+            </ul>
+        </template>
+
+
+        <!-- Search view for "model" -->
+        <record id="mto_chain_search" model="ir.ui.view">
+            <field name="name">mto_chain_search</field>
+            <field name="model">mto.chain</field>
+            <field name="type">search</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <search string="MTO Chain">
+                    <field name="name" />
+                </search>
+            </field>
+        </record>
+
+        <!-- Main window action for "model" -->
+        <record id="action_mto_chain" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Links</field>
+            <field name="res_model">mto.chain</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="target">current</field>
+            <field name="domain">[('res_model','in',('mrp.production','sale.order.line'))]</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="mto_chain_search" />
+        </record>
+        
+        <record id="menu_linking" model="ir.ui.menu">
+            <field name="name">MTO</field>
+            <field name="sequence" eval="1000" />
+        </record>
+
+        <record id="menu_mto_chain" model="ir.ui.menu" >
+            <field name="name">MTO Links</field>
+            <field name="sequence" eval="10" />
+            <field name="action" ref="action_mto_chain" />
+            <field eval="[(6,0,[ref('base.group_no_one')])]" name="groups_id"/>
+            <field name="parent_id" ref="menu_linking" />
+        </record>
+        
+
+        <template id="mto_chain_assets" name="mto chain assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/mto_chain/static/lib/js/jstree/dist/themes/default/style.min.css" />
+                <script type="text/javascript" src="/mto_chain/static/lib/js/jstree/dist/jstree.min.js"></script>
+                <script type="text/javascript" src="/mto_chain/static/src/js/mto_chain.js"></script>
+            </xpath>
+        </template>
+
+        <record id="action_mto_client" model="ir.actions.client">
+            <field name="name">MTO Chain And Discrepancy Report</field>
+            <field name="tag">mto_chain_action</field>
+        </record>
+
+        <record id="plan_unplan_wizard" model="ir.ui.view">
+            <field name="name">plan_unplan_wizard</field>
+            <field name="model">plan.unplan.wizard</field>
+            <field name="type">form</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="plan_unplan_wizard" create="0" delete="0" edit="0">
+                    <sheet>
+                        <div>Do you really want to continue?</div>
+                        <field name="function" invisible="1" />
+                    </sheet>
+                    <footer>
+                        <button name="action_plan" string="Plan" type="object" class="oe_highlight" attrs="{'invisible': [('function','!=','action_mo_plan')]}" />
+                        <button name="action_plan" string="Unplan" type="object" class="oe_highlight" attrs="{'invisible': [('function','!=','action_mo_unplan')]}" />
+                        <button string="Cancel" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="plan_unplan_wizard_ation" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Confirmation</field>
+            <field name="res_model">plan.unplan.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="plan_unplan_wizard" />
+            <field name="target">new</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+    </data>
+</odoo>

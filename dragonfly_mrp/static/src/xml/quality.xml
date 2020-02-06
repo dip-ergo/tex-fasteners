@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="WorkorderIframeUrl">
+        <iframe t-att-src="url" style="width:1000px;height:1000px;"></iframe>
+    </t>
+</templates>

@@ -1,0 +1,5 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"mto_all","mto_all","model_mto_chain","",1,1,1,1
+"mto_priority_all","mto_priority_all","model_mto_priority","",1,1,1,1
+"procurement_linking_all","mto_all","model_procurement_linking","",1,1,1,1
+"procurement_linking_line_all","mto_priority_all","model_procurement_linking_line","",1,1,1,1

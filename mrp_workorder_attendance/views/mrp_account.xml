@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <template id="mrp_cost_structure_worker_lines" inherit_id="mrp_account.mrp_cost_structure">
+            <xpath expr="//t[@t-foreach='lines']/div[last()]" position="replace">
+                <t t-set="wo_cost" t-value="0.0" />
+                <t t-foreach="line['workorders']" t-as="workorder">
+                    <t t-if="workorder.worker_times">
+                        <h3>
+                            <t t-esc="workorder.name" />
+                        </h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span>Worker</span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span>Working Time</span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span>Cost/hour</span>
+                                    </th>
+                                    <th class="text-right">
+                                        <span>Total Cost</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="totalcost" t-value="0" />
+                                <tr t-foreach="workorder.get_worker_time_grouped().items()" t-as="row">
+                                    <td>
+                                        <span t-esc="row[0].name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span>
+                                            <t t-esc="row[1]" t-options='{"widget": "float_time"}'/> HH:MM</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="workorder.workcenter_id.cost_hour_employee" t-options='{"widget": "monetary", "display_currency": currency}' />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="row[1] * workorder.workcenter_id.cost_hour_employee" t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                    </td>
+                                    <t t-set="totalcost" t-value="totalcost + row[1] * workorder.workcenter_id.cost_hour_employee"/>
+                                </tr>
+                                <t t-set="wo_cost" t-value="wo_cost+totalcost" />
+                                <tr>
+                                    <td colspan="3" class="text-right">
+                                        <strong>Worker Cost in Workorder</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="totalcost" t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </t>
+                <!-- Cost table -->
+                <div class="row">
+                    <div class="col-6 offset-6">
+                        <table class="table table-sm">
+                            <tr t-if="line['mo_qty'] &gt; 1">
+                                <td class="text-right">
+                                    <strong>Cost for <t t-esc="line['mo_qty']"/> <t t-esc="line['mo_uom'].name"/></strong>
+                                </td>
+                                <td class="text-right">
+                                    <strong t-esc="line['total_cost'] + opcost + wo_cost" t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <strong>Unit Cost</strong>
+                                </td>
+                                <th class="text-right">
+                                    <strong t-esc="(line['total_cost'] + opcost + wo_cost) / line['mo_qty']" t-options='{"widget": "monetary", "display_currency": currency}'/>
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//h3[contains(text(),'Cost of Operations')]" position="attributes">                
+                <attribute name="style">display: none;</attribute>
+            </xpath>
+            <xpath expr="//h3[contains(text(),'Cost of Operations')]/following-sibling::table" position="attributes">                
+                <attribute name="style">display: none;</attribute>
+            </xpath>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="syray_mrp_document_view">
+        <field name="name">Document View</field>
+        <field name="priority" eval="1600"></field>
+        <field name="model">mrp.document</field>
+        <field name="arch" type="xml">
+            <form edit="0" delete="0" create="0" class="o_workorder_tablet">
+                <div class="workorder_pdf_new">
+                  <field name="mimetype" invisible="1"/>
+
+                  <field name="datas" widget="pdf_viewer" readonly="True" nolabel="1" attrs="{'invisible': [('mimetype','!=','application/pdf')]}"/>
+                    <div attrs="{'invisible': [('mimetype','=','application/pdf')]}" ><b>Not A PDF Document</b></div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="mrp_doc_open_pdf" model="ir.actions.act_window">
+        <field name="name">mrp_doc_open_pdf</field>
+        <field name="res_model">mrp.document</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field ref="syray_mrp_document_view" name="view_id"/>
+    </record>
+</odoo>

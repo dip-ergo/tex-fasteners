@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="view_cancel_mto" model="ir.ui.view">
+            <field name="name">view_cancel_mto</field>
+            <field name="model">cancel.mto.wizard</field>
+            <field name="type">form</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <form string="Caption" create="true" delete="true" edit="true">
+                    <sheet>
+                        <div class="oe_title">Do you really want to cancel all MTO?</div>
+                    </sheet>
+                    <footer>
+                        <button name="action_cancel" string="Cancel MTO" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" />                        
+                    </footer>
+                </form>                
+            </field>
+        </record>
+
+        <record id="action_cancel_mto" model="ir.actions.act_window">
+            <field name="type">ir.actions.act_window</field>
+            <field name="name">Cancel MTO Form</field>
+            <field name="res_model">cancel.mto.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>        
+    </data>
+</odoo>

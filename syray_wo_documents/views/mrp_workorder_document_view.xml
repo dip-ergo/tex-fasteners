@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_workorder_view_form_tablet_inherit_syray_mrp" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.inherit.syray.mrp</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp_workorder_attendance.mrp_workorder_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='wo_custom_bar']/button[last()]" position="after">
+                <button name="action_open_documents_syray" type="object" class="btn-secondary" string="View Docs" icon="fa-book o_workorder_btn_icon_small"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_production_workorder_form_view_inherit_syray" model="ir.ui.view">
+        <field name="name">mrp.workorder.view.form.inherit.syray</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <notebook position="before">
+                <field name="public_url" invisible="1"/>
+            </notebook>
+        </field>
+    </record>
+
+    <!--hack to open the dynamic action on new tab-->
+    <record id="action_open_active_workorder_syray" model="ir.actions.server">
+        <field name="name">Workorder</field>
+        <field name="model_id" ref="model_mrp_workorder"/>
+        <field name="binding_model_id" ref="mrp_workorder.model_mrp_workorder"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env['mrp.workorder'].open_product_attachments_syray()
+        </field>
+    </record>
+
+</odoo>

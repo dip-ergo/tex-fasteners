@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quality_point_view_form_inherit_dragonfly" model="ir.ui.view">
+        <field name="name">quality.point.view.form.inherit.dragonfly</field>
+        <field name="model">quality.point</field>
+        <field name="inherit_id" ref="quality.quality_point_view_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="survey_template_id" />
+            </field>
+            <notebook position="after">
+                <field name="public_url" class="o_workorder_iframe_url" widget="WorkorderIframeUrl"/>
+            </notebook>
+        </field>
+    </record>
+    <record id="quality_check_view_form_inherit_dragonfly" model="ir.ui.view">
+        <field name="name">quality.check.view.form.inherit.dragonfly</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <notebook position="after">
+                <field name="public_url" class="o_workorder_iframe_url" widget="WorkorderIframeUrl"/>
+            </notebook>
+        </field>
+    </record>
+    
+</odoo>

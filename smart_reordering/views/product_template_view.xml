@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="product_template_security_leadtime" model="ir.ui.view">
+            <field name="name">product_template_security_leadtime</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.view_template_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='route_ids']" position="after">
+                    <label for="security_stock" attrs="{'invisible':[('type','=','service')]}"/>
+                    <div attrs="{'invisible':[('type','=','service')]}">
+                        <field name="security_stock" class="oe_inline"/>%
+                    </div>
+                </xpath>
+                <xpath expr="//page[@name='inventory']/group[last()]" position="after">
+                    <group>
+                        <field name="reorder_lead_days" class="oe_inline"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_product_selected_seller" model="ir.ui.view">
+            <field name="name">view_product_selected_seller</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
+            <field name="type">form</field>
+            <field name="mode">extension</field>
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='purchase']/*[1]" position="before">
+                    <group string="Selected Vendor" name="variant_vendor_selected" >
+                        <field name="selected_vendor_id" widget="radio" domain="[('product_tmpl_id','=',id)]" options="{'show_all_options_readonly': true}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="product_variant_selected_seller" model="ir.ui.view">
+            <field name="name">product_variant_selected_seller</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='purchase']/*[1]" position="before">
+                    <group string="Selected Vendor" name="variant_vendor_selected" >
+                        <field name="selected_vendor_id" widget="radio" domain="[('product_tmpl_id','=',product_tmpl_id)]" options="{'show_all_options_readonly': true}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="product_view_relative_demand" model="ir.ui.view">
+            <field name="name">product_view_relative_demand</field>
+            <field name="model">product.product</field>
+            <field name="type">tree</field>
+            <field name="mode">extension</field>
+            <field name="inherit_id" ref="product.product_product_tree_view" />
+            <field name="priority" eval="16" />
+            <field name="active" eval="True" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[last()]" position="after">
+                    <field name="relative_demand" />
+                </xpath>
+            </field>
+        </record>
+
+        <template id="relational_fields_assets" name="relational_fields_assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/smart_reordering/static/src/js/relational_fields.js"></script>
+            </xpath>
+        </template>
+    </data>
+</odoo>
